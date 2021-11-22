@@ -1,10 +1,12 @@
 import {
   BadRequestException,
+  Logger,
   ValidationError,
   ValidationPipe,
 } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import configuration from './config/configuration';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -31,8 +33,9 @@ async function bootstrap() {
       },
     }),
   );
-  const port = process.env.PORT || 3002;
+  const port = configuration.call(this).port || 3002;
   app.setGlobalPrefix('/api/v1');
   await app.listen(port);
+  Logger.log('App is running on port ' + port, "Create Rest API");
 }
 bootstrap();
